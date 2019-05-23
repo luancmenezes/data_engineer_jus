@@ -10,5 +10,11 @@ import scrapy
 
 class CrawlersTribunaisItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+    classe = scrapy.Field()
+    area = scrapy.Field()
+    assunto = scrapy.Field()
+    dt_distribuicao = scrapy.Field()
+    vl_acao = scrapy.Field()
+    pt_processo = scrapy.Field(),
+    list_movimentacoes = scrapy.Field()
     pass
