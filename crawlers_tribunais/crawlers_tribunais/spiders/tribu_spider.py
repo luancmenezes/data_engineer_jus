@@ -21,6 +21,9 @@ class TribuSpider(scrapy.Spider):
         yield scrapy.FormRequest(url=self.consult_process_url, formdata=data, callback=self.parse_quotes)
     
     def parse_quotes(self,response):
+        moviments = list
+        dic = dict()
+
         classe = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[2]\
                             //span[contains(@class,"")][@id=""]//span/text()').extract_first()
         area = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[1]//td/text()')[-1].extract().strip() 
@@ -33,7 +36,19 @@ class TribuSpider(scrapy.Spider):
         list_process_2 = [value.strip() for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/text()').extract()\
                      if bool(value.strip()) ]
         list_process_3 = [value.strip().replace(':','') for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/span/text()').extract()]                                                                                                                              
-        # harmonizing(list_process_1,list_process_2, list_process_3)
-      
+        
+        qtd = response.xpath('//*[@id="tabelaUltimasMovimentacoes"]/text()')
+        for v1 in range(1,len(qtd)): 
+            for v2 in range(1,4,2): 
+                print (v2) 
+                path = response.xpath('//*[@id="tabelaUltimasMovimentacoes"]/tr[{}]/td[{}]/text()'.format(v1,v2))  
+                if v2 == 1:  
+                    dic['data_mov'] = path.extract()[0].strip()  
+                else:  
+                    dic['mov'] = path.extract()[0].strip() + '\n' 
+                    path = response.xpath('//*[@id="tabelaUltimasMovimentacoes"]/tr[{}]/td[{}]/span/text()'.format(v1,v2))  
+                    dic['mov']  +=  path.extract()[0].strip()      
+            moviments.append(dic)         
+
 
     # yield Request(url, callback=self.parse)
