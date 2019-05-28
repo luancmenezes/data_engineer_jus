@@ -15,6 +15,7 @@ class CrawlersTribunaisItem(scrapy.Item):
     assunto = scrapy.Field()
     dt_distribuicao = scrapy.Field()
     vl_acao = scrapy.Field()
-    pt_processo = scrapy.Field(),
+    juiz = scrapy.Field()
+    pt_processo = scrapy.Field()
     list_movimentacoes = scrapy.Field()
     pass
