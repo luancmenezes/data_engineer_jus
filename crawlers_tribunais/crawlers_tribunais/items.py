@@ -18,4 +18,6 @@ class CrawlersTribunaisItem(scrapy.Item):
     juiz = scrapy.Field()
     pt_processo = scrapy.Field()
     list_movimentacoes = scrapy.Field()
+    processo = scrapy.Field()
+    vara = scrapy.Field()
     pass
