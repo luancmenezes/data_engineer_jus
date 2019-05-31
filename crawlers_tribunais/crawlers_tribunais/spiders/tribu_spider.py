@@ -22,7 +22,7 @@ class TribuSpider(Spider):
         'https://esaj.tjsp.jus.br/cpopg/open.do',#1º grau
         'https://esaj.tjsp.jus.br/cposg/open.do', #2º grau
         # 'https://esaj.tjsp.jus.br/cposgcr/open.do', #2º grau turma recursal
-        # 'https://esaj.tjms.jus.br/cpopg5/open.do',
+        'https://esaj.tjms.jus.br/cpopg5/open.do',
         # 'https://esaj.tjms.jus.br/cposg5/open.do'
     ]
 
@@ -44,7 +44,8 @@ class TribuSpider(Spider):
             'dadosConsulta.localPesquisa.cdLocal': '-1',
             'cbPesquisa': 'NUMPROC',
             'dadosConsulta.tipoNuProcesso': 'SAJ',
-            'dadosConsulta.valorConsulta': '0821901-51.2018.8.12.0001'
+            'dadosConsulta.valorConsulta': '0821901-51.2018.8.12.0001',
+            'uuidCaptcha': 'sajcaptcha_19f9ec880b8648a28f8f74d4ca0f444f'
         } 
         data_tjms_2 = {
             'paginaConsulta': '1',
@@ -56,18 +57,21 @@ class TribuSpider(Spider):
         } 
 
 
-        if('cpopg' in response.request.url):
-            yield FormRequest.from_response(response, formdata=data_tbjs_1, callback=self.parse_tbjs, meta={'degree':'tbjs'})
-        elif('cposg' in response.request.url):
+        if('cpopg' == response.request.url.split('/')[-2]):
+            yield FormRequest.from_response(response, formdata=data_tbjs_1, callback=self.parse_tbj, meta={'degree':'tbjs'})
+        elif('cposg' == response.request.url.split('/')[-2]):
             yield FormRequest.from_response(response, formdata=data_tbjs_2, callback=self.parse_tbjs_2)
+        elif('cpopg5' == response.request.url.split('/')[-2]):
+            yield FormRequest.from_response(response, formdata=data_tjms_1, callback=self.parse_tbj, meta={'degree':'tjms'})
+
        
     def parse_tbjs_2(self,response):
         links = response.xpath('//a[contains(@class,"linkProcesso")]/@href').extract()
         for url in links:
             page = response.urljoin(url)
-            yield Request(page, callback=self.parse_tbjs, meta={'degree':'tbjs_2'})    
+            yield Request(page, callback=self.parse_tbj, meta={'degree':'tbjs_2'})    
 
-    def parse_tbjs(self,response):
+    def parse_tbj(self,response):
         # open_in_browser(response)
         
         degree = response.meta["degree"]
@@ -77,12 +81,15 @@ class TribuSpider(Spider):
         moviments = []
         dic = dict()
 
-        if (degree != 'tbjs_2'):
+        if (degree == 'tbjs'):
             item['vl_acao'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[10]//span/text()').extract_first().split()[1]
             item['dt_distribuicao'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[6]//span/text()').extract_first().split()[0]
             item['juiz'] =  response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[9]//span/text()').extract_first()
-            item['vl_acao'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[10]//span/text()').extract_first().split()[1]
-
+        elif(degree == 'tjms' ):
+            item['vl_acao'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[9]//span/text()').extract_first().strip()
+            item['dt_distribuicao'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[5]//span/text()').extract_first()[:10]
+            item['juiz'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[8]//span/text()').extract_first()
+            item['vara'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[6]//span/text()').extract_first()
         elif (degree == 'tbjs_2' or degree != 'tbjs_2'):
             try:
                 item['processo'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[1]//td[2]//table//span/text()').extract_first().strip()
