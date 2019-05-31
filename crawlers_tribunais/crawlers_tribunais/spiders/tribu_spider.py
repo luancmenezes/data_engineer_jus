@@ -4,6 +4,14 @@ from scrapy.http.request import Request
 from scrapy.utils.response import open_in_browser
 from crawlers_tribunais.items import CrawlersTribunaisItem
 
+def foundTrb(num_process):
+    uf = num_process.split('.')[-2]
+    uf_trb = {
+        '26':'tjsp',
+        '12':'tjms'
+    }
+    return uf_trb[uf]
+    
 
 
 class TribuSpider(Spider):
@@ -32,7 +40,22 @@ class TribuSpider(Spider):
             'tipoNuProcesso':'SAJ',
             'paginaConsulta':'1'
         }
-        
+        data_tjms_1 = {
+            'dadosConsulta.localPesquisa.cdLocal': '-1',
+            'cbPesquisa': 'NUMPROC',
+            'dadosConsulta.tipoNuProcesso': 'SAJ',
+            'dadosConsulta.valorConsulta': '0821901-51.2018.8.12.0001'
+        } 
+        data_tjms_2 = {
+            'paginaConsulta': '1',
+            'localPesquisa.cdLocal': '-1',
+            'cbPesquisa': 'NUMPROC',
+            'tipoNuProcesso': 'SAJ',
+            'dePesquisa':' 0821901-51.2018.8.12.0001',
+            'pbEnviar': 'Pesquisar'     
+        } 
+
+
         if('cpopg' in response.request.url):
             yield FormRequest.from_response(response, formdata=data_tbjs_1, callback=self.parse_tbjs, meta={'degree':'tbjs'})
         elif('cposg' in response.request.url):
@@ -64,8 +87,6 @@ class TribuSpider(Spider):
             try:
                 item['processo'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[1]//td[2]//table//span/text()').extract_first().strip()
                 item['vara'] = '2ª Vara Cível '
-                # item['juiz'] =  response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[9]//span/text()').extract_first()
-
             except:
                 pass
         
