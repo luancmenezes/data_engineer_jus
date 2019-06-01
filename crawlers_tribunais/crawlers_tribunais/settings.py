@@ -64,9 +64,15 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
+ITEM_PIPELINES = {
 #    'crawlers_tribunais.pipelines.CrawlersTribunaisPipeline': 300,
-#}
+        'scrapyelasticsearch.scrapyelasticsearch.ElasticSearchPipeline': 500
+}
+ELASTICSEARCH_SERVER = 'localhost' 
+ELASTICSEARCH_PORT = 9200 
+ELASTICSEARCH_INDEX = 'tbj'
+ELASTICSEARCH_TYPE = 'items'
+# ELASTICSEARCH_UNIQ_KEY = 'procss'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
