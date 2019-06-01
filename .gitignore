@@ -1,3 +1,6 @@
-*pyc*
+*.pyc*
+.pyc*
+*.pyc
 *vscoode*
 *log*
+*jusenv*
