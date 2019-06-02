@@ -22,5 +22,6 @@ class CrawlersTribunaisItem(scrapy.Item):
     pt_processo = scrapy.Field()
     list_movimentacoes = scrapy.Field()
     processo = scrapy.Field()
+    processo_2 = scrapy.Field()
     vara = scrapy.Field()
     pass
