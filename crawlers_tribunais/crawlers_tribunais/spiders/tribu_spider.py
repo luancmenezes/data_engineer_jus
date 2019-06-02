@@ -68,9 +68,15 @@ class TribuSpider(Spider):
                                                                 'grau':'1'})
             yield FormRequest.from_response(response, formdata=data_tbjs_2, 
                                                       callback=self.parse_tbjs_2,
-                                                      meta={'tribunal':tbj_id})
+                                                      meta={'tribunal':tbj_id,
+                                                            'processo':self.processo })
         elif(tbj_id == 'tjms'):
-            yield FormRequest.from_response(response, formdata=data_tjms_1, callback=self.parse_tbj, meta={'degree':'tjms'})
+            yield FormRequest.from_response(response, formdata=data_tjms_1, 
+                                                      callback=self.parse_tbj, 
+                                                      meta={'degree':'tjms',
+                                                            'processo':self.processo,
+                                                            'tribunal':tbj_id,
+                                                            'grau':'1'})
             yield FormRequest.from_response(response, formdata=data_tjms_2,
                      callback=self.parse_tbj,
                       meta={'degree':'tjms_2',
@@ -85,7 +91,7 @@ class TribuSpider(Spider):
             page = response.urljoin(url)
             yield Request(page, callback=self.parse_tbj,
                                 meta={'degree':'tbjs_2',
-                                'processo':self.processo,
+                                'processo':response.meta["processo"],
                                 'tribunal':response.meta["tribunal"],
                                 'grau':'2'})    
 
@@ -113,7 +119,7 @@ class TribuSpider(Spider):
             item['juiz'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[7]//span/text()').extract_first()                                                                                                                     
         elif (response.meta["grau"] == '2' and response.meta["tribunal"] == 'tjsp' ):
             try:
-                item['processo'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[1]//td[2]//table//span/text()').extract_first().strip()
+                item['processo_2'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[1]//td[2]//table//span/text()').extract_first().strip()
                 item['vara'] = '2ª Vara Cível '
             except:
                 pass
