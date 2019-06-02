@@ -8,33 +8,38 @@ value = ''
 def json2html(res):
     for doc in res['hits']['hits']:
         yield doc['_source']
-# def scrapyCall():
+def scrapy_2_elasticSearch(nprocesso):
+#     os.chdir('crawlers_tribunais/')
+    os.system('cd crawlers_tribunais/ && scrapy crawl tribunal -a processo={}'.format(nprocesso))
 
 @app.route('/')
 def home():
-    print(es)
     return render_template('index.html')
 
 @app.route('/searchengine', methods=['POST', 'GET']) 
 def search():
     index = "tbj"
+    response = ''
     nprocesso = request.form.get('nprocesso')
 
     if es.indices.exists(index=index):
-        res = es.search(index=index,  body={"query": {"match": {'processo':nprocesso}}})
+        res = es.search(index=index,  body={"query": 
+                                           {"multi_match":
+                                           {"query":nprocesso,
+                                           "fields": [ "processo", "processo_2" ]}}})
         if res['hits']['max_score']:
             response = json2html(res)
         else:
-            os.chdir('crawlers_tribunais/')
-            os.system('scrapy crawl tribunal -a processo={}'.format(nprocesso))
+           scrapy_2_elasticSearch(nprocesso) 
     else:
-        os.chdir('crawlers_tribunais/')
-        os.system('scrapy crawl tribunal -a processo="{}"'.format(nprocesso))
-        res = es.search(index=index,  body={"query": {"match": {'processo':nprocesso}}})
+        scrapy_2_elasticSearch(nprocesso) 
+        res = es.search(index=index,  body={"query": 
+                                           {"multi_match":
+                                           {"query":nprocesso,
+                                           "fields": [ "processo", "processo_2" ]}}})
         if res['hits']['max_score']:
             response = json2html(res)
-        else:
-            response = None
+        
 
     return render_template('index.html',documents=list(response))
 
