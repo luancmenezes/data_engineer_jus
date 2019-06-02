@@ -6,11 +6,11 @@ class Formdata:
         self.processo = processo
     def tbjs_1(self):
         formdata = {
-                    'dadosConsulta.valorConsulta' : self.processo,
-                    'cbPesquisa':'NUMPROC',
-                    'dadosConsulta.localPesquisa.cdLocal':'-1',
-                    'dadosConsulta.tipoNuProcesso':'SAJ'
-                }
+            'dadosConsulta.valorConsulta' : self.processo,
+            'cbPesquisa':'NUMPROC',
+            'dadosConsulta.localPesquisa.cdLocal':'-1',
+            'dadosConsulta.tipoNuProcesso':'SAJ'
+        }
         return formdata
     def tbjs_2(self):
         formdata = {
