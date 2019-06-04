@@ -18,7 +18,8 @@
 
 ##### 3) Buildar e Rodar a aplicação
 
-```docker-compose up```
+```docker-compose up``` -> ElasticSearch
+```flask run``` -> Flask
 
 ## Bibliotecas utilizadas
 
@@ -28,10 +29,7 @@ ElasticSearch
 Flask
 ScrapyElasticSearch
 ```
-## Execução
-Dentro do diretório data_engineer_jus/ 
 
-- flask run
 
 ## Autor
 
