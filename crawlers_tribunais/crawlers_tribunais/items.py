@@ -9,7 +9,7 @@ import scrapy
 
 
 class CrawlersTribunaisItem(scrapy.Item):
-    # define the fields for your item here like:
+    # Dados a serem coletados:
     n_processo = scrapy.Field()
     tribunal = scrapy.Field()
     grau = scrapy.Field()
