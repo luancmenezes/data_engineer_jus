@@ -27,6 +27,8 @@ def search():
     nprocesso = request.form.get('nprocesso')
     
     if es.indices.exists(index=index):
+        #busca em dois campos disitintos de processo 1 de primeiro grau e o de segundo grau
+        #através de um index
         res = es.search(index=index,  body={"query": 
                                            {"multi_match":
                                            {"query":nprocesso,
@@ -43,8 +45,6 @@ def search():
                                            "fields": [ "processo", "processo_2" ]}}})
         if res['hits']['max_score']:
             response = json2html(res)
-    print("AQUI_2 {}".format(nprocesso))
-
     return render_template('index.html', documents=list(response))
 
 

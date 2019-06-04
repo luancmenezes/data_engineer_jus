@@ -20,15 +20,15 @@ class TribuSpider(Spider):
         'https://esaj.tjsp.jus.br/cpopg/open.do',#1º grau
         'https://esaj.tjsp.jus.br/cposg/open.do', #2º grau
         'https://esaj.tjsp.jus.br/cposgcr/open.do', #2º grau turma recursal
-        'https://esaj.tjms.jus.br/cpopg5/open.do',
+        'https://esaj.tjms.jus.br/cpopg5/open.do',#1º grau
         'https://esaj.tjms.jus.br/cposg5/open.do' #2º grau
     ]
 
     def parse(self,response):
+        tbj_id = foundTrb(self.processo) #define qual é o triibunal pela regra http://www.cnj.jus.br/programas-e-acoes/pj-numeracao-unica
+        form = Formdata(self.processo) #define tipo de formulário para acessar informações
 
-        tbj_id = foundTrb(self.processo)
-        form = Formdata(self.processo)
-
+        #Condicional para decidir qual informação será crawleada
         if(tbj_id == 'tjsp'):
             yield FormRequest.from_response(response,   formdata=form.tbjs_1(),
                                                         callback=self.parse_tbj,
@@ -56,6 +56,7 @@ class TribuSpider(Spider):
 
        
     def parse_tbjs_2(self,response):
+        #parse para o tribunal de justiçca de SP de 2 grau
         links = response.xpath('//a[contains(@class,"linkProcesso")]/@href').extract()
         for url in links:
             page = response.urljoin(url)
@@ -66,6 +67,7 @@ class TribuSpider(Spider):
                                 'grau':'2'})    
 
     def parse_tbj(self,response):
+        #parse generalista para crawlers
         item = CrawlersTribunaisItem()
         moviments = []
         dic = dict()
@@ -103,13 +105,14 @@ class TribuSpider(Spider):
         except:
             pass
         item['assunto'] = response.xpath('//table[contains(@class,"secaoFormBody")][@id=""]//tr[4]//span/text()').extract_first()
-            #2nd nao existe
-            # list_process_1
+           
+        # Não foi especificado como deveria ser armazenado as partes do processo
+        # Foram concatenada as informações   
         item['pt_processo'] = [value.strip().replace(':','')for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[1]/span/text()').extract()]
-            # list_process_2 = [value.strip() for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/text()').extract()\
-                        #  if bool(value.strip()) ]
-            # list_process_3 = [value.strip().replace(':','') for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/span/text()').extract()]                                                                                                                              
+        item['pt_processo'] += [value.strip() for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/text()').extract()
+        item['pt_processo'] += [value.strip().replace(':','') for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/span/text()').extract()]                                                                                                                              
         
+        #Ultima movimentacoes
         qtd = response.xpath('//*[@id="tabelaUltimasMovimentacoes"]/text()')
         try:
             for v1 in range(1,len(qtd)): 
