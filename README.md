@@ -19,6 +19,7 @@
 ##### 3) Buildar e Rodar a aplicação
 
 ```docker-compose up``` -> ElasticSearch
+
 ```flask run``` -> Flask
 
 ## Bibliotecas utilizadas
