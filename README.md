@@ -10,7 +10,10 @@
 
 <!-- - Docker: https://docs.docker.com/install/linux/docker-ce/ubuntu/ -->
 
-- sudo sh install.sh
+- pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+- pip install -r requirements.txt
 - Docker Compose: https://docs.docker.com/compose/install/
 
 ##### 3) Buildar e Rodar a aplicação
