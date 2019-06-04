@@ -1,6 +1,7 @@
 # Jusbrasil - Desafio Backend Engineer | Data
 
 ## Passo a Passo
+Para execução do projeto é necessário a instalação das devidas dependências as principais estão listados abaixo, no arquivo requirements.txt haverá todos os pacotes restantes.
 
 ##### 1) Clonar o repositório
 
@@ -8,7 +9,9 @@
 
 ##### 2) Instalar as dependênicas
 
-- Docker: https://docs.docker.com/install/linux/docker-ce/ubuntu/
+<!-- - Docker: https://docs.docker.com/install/linux/docker-ce/ubuntu/ -->
+
+- sudo sh install.sh
 - Docker Compose: https://docs.docker.com/compose/install/
 
 ##### 3) Buildar e Rodar a aplicação
@@ -23,6 +26,10 @@ ElasticSearch
 Flask
 ScrapyElasticSearch
 ```
+## Execução
+Dentro do diretório data_engineer_jus/ 
+
+- flask run
 
 ## Autor
 
