@@ -1,7 +1,6 @@
 # Jusbrasil - Desafio Backend Engineer | Data
 
 ## Passo a Passo
-Para execução do projeto é necessário a instalação das devidas dependências as principais estão listados abaixo, no arquivo requirements.txt haverá todos os pacotes restantes.
 
 ##### 1) Clonar o repositório
 
