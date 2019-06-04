@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+  # nginx:
+  #   image: jwilder/nginx-proxy:alpine
+  #   container_name: nginx
+  #   restart: always
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+
+ 
+  elastic:
+    image: "elasticsearch:7.1.0"
+    restart: always
+    volumes:
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ELASTIC_PASSWORD=root
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  app:
+    build:
+      context: .
+    container_name: app
+    restart: always
+    depends_on:
+      # - nginx
+      - elastic
+    volumes:
+      - .:/var/www
+  #   environment:
+  #     - UWSGI_SOCKET=0.0.0.0:80
+  #     - UWSGI_PYTHON_AUTO_RELOAD=1
+  #     - VIRTUAL_PROTO=uwsgi
+  #     - VIRTUAL_PORT=80
+  #     - VIRTUAL_HOST=localhost
+    
