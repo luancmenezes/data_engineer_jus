@@ -72,6 +72,8 @@ ELASTICSEARCH_SERVER = 'localhost'
 ELASTICSEARCH_PORT = 9200 
 ELASTICSEARCH_INDEX = 'tbj'
 ELASTICSEARCH_TYPE = 'items'
+ELASTICSEARCH_PASSWORD='root'
+ELASTICSEARCH_USERNAME='elastic'
 # ELASTICSEARCH_UNIQ_KEY = 'procss'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
