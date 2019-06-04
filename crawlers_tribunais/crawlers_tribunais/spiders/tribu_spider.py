@@ -108,9 +108,9 @@ class TribuSpider(Spider):
            
         # Não foi especificado como deveria ser armazenado as partes do processo
         # Foram concatenada as informações   
-        item['pt_processo'] = [value.strip().replace(':','')for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[1]/span/text()').extract()]
-        item['pt_processo'] += [value.strip() for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/text()').extract()
-        item['pt_processo'] += [value.strip().replace(':','') for value in response.xpath('//table[@id="tableTodasPartes"]//tr[contains(@class, "fundoClaro")]//td[2]/span/text()').extract()]                                                                                                                              
+        item['pt_processo'] = [value.strip().replace(':','')for value in response.xpath('//table[@id="tablePartesPrincipais"]//tr[contains(@class, "fundoClaro")]//td[1]/span/text()').extract()]
+        item['pt_processo'] += [value.strip() for value in response.xpath('//table[@id="tablePartesPrincipais"]//tr[contains(@class, "fundoClaro")]//td[2]/text()').extract()]
+        item['pt_processo'] += [value.strip().replace(':','') for value in response.xpath('//table[@id="tablePartesPrincipais"]//tr[contains(@class, "fundoClaro")]//td[2]/span/text()').extract()]                                                                                                                              
         
         #Ultima movimentacoes
         qtd = response.xpath('//*[@id="tabelaUltimasMovimentacoes"]/text()')
