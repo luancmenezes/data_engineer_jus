@@ -1,5 +1,5 @@
 elasticsearch==7.0.2
-Flask==1.0.3
+Flask==2.3.2
 Scrapy==1.6.0
 ScrapyElasticSearch==0.9.1
 gevent==1.2.1
